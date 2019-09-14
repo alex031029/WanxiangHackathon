@@ -1,6 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
+from eth_account.messages import defunct_hash_message
 from django.core import serializers
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
@@ -36,6 +37,7 @@ def apply(req):
         # proof.
         msg = {"issuer_did": issuer_did, 'applicant_did': applicant_did, "type": type, "color": color, "brand": brand,
                "battery_capacity": battery_capacity}
+        print('*****:', json.dumps(msg))
         sig = str(make_sig(json.dumps(msg)))
         create_time = datetime.now()
         expired_time = create_time + timedelta(days=365)
@@ -48,7 +50,7 @@ def apply(req):
         credential = Credential(id=id, applicant_did=applicant_did, type=type, color=color, brand=brand,
                                 battery_capacity=battery_capacity, issuer_did=issuer_did, sig=sig,
                                 create_time=create_time, expired_time=expired_time)
-        # credential.save()
+        credential.save()
         credential_dict = msg
         credential_dict['sig'] = sig
         credential_dict['id'] = id
@@ -108,25 +110,17 @@ def make_sig(msg):
         # print(signature)
         # 0xc91c9f8774574155bdcb845fea373eac2e83274f871d4b0223d6b2806ad40e17255a5e7b6b3f72f3572c6b3d5a79e8ed32fa307c5fd94098b789cc88d684952c00
 
-        print(pk.public_key.to_checksum_address())
-        print(111, signature.recover_public_key_from_msg(msg))
-        print(msg)
-        print(pk.public_key)
-        print(222, signature.verify_msg(msg, pk.public_key))
+        # print(pk.public_key.to_checksum_address())
+        # print(111, signature.recover_public_key_from_msg(msg))
+        # print(msg)
+        # print(pk.public_key)
+        # print(222, signature.verify_msg(msg, pk.public_key))
         return signature
 
 
-from eth_keys.datatypes import (
-    LazyBackend,
-    PublicKey,
-    PrivateKey,
-    Signature, )
-
-
 def verify(req):
-    vc = req.GET.get('vc')
-    vc = json.loads(vc)
-    print(vc)
+    vc_str = req.GET.get('vc')
+    vc = json.loads(vc_str)
     sig_from_client = vc.get('sig')
     issuer_did = vc.get('issuer_did')
     applicant_did = vc.get('applicant_did')
@@ -136,13 +130,16 @@ def verify(req):
     battery_capacity = vc.get('battery_capacity')
     msg = {"issuer_did": issuer_did, 'applicant_did': applicant_did, "type": type, "color": color, "brand": brand,
            "battery_capacity": battery_capacity}
+    msg = json.dumps(msg)
+    print("88888:", msg)
     print('sig_from_client', sig_from_client)
 
-    with open(f'assets/issuer_key') as keyfile:
-        encrypted_key = keyfile.read()
-        private_key = w3.eth.account.decrypt(encrypted_key, 'Abc123456')
-        pk = keys.PrivateKey(private_key)
-        msg = json.dumps(msg).encode()
-        signature = pk.sign_msg(msg)
+    print("================================================================================")
+    # gen msg hash
+    msghash = defunct_hash_message(text=msg).hex()
+    print('msghash:', msghash)
 
-    return JsonResponse({"result": signature.verify_msg(msg, pk.public_key)})
+    from eth_account import Account
+    addr = Account.recoverHash(msghash, signature=sig_from_client)
+    print('recover addr: ', addr)
+    return HttpResponse(addr == '7c7f4692fb2f9e6d19165d6e33111c4605119a99')
