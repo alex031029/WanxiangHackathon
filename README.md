@@ -1,5 +1,5 @@
-# WangxiangHackathon
+# Wanxiang Blockchain Hackathon
 
-WangxiangHackathon 2019 Repo
+Wanxiang Blockchain Hackathon 2019
 
 Shi Yanchen, Liu Shaowei, Wu Jiajing, Kang Beibei
