@@ -4,7 +4,7 @@ from django.db import models
 # Create your models here.
 
 class Issuer(models.Model):
-    did = models.CharField(max_length=48)
+    did = models.CharField(max_length=48,primary_key=True)
     name = models.CharField(max_length=100)
     industry = models.CharField(max_length=100)
 
