@@ -5,13 +5,15 @@ from django.shortcuts import render
 # Create your views here.
 
 def search(req):
-    k = req.GET.get('did')
-    # print('did is', k)
-    
+    name = req.GET.get('name')
 
-    return JsonResponse(k)
+    return JsonResponse({})
 
 
 def detail(req):
     m = {"k": "v"}
     return JsonResponse(m)
+
+
+def apply(req):
+    return JsonResponse({})
