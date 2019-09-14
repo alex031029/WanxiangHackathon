@@ -13,7 +13,7 @@ class Issuer(models.Model):
 
 
 class Credential(models.Model):
-    id = models.IntegerField(primary_key=True)
+    id = models.CharField(max_length=100, primary_key=True)
     create_time = models.DateTimeField()
     expired_time = models.DateTimeField()
     # claim:
@@ -24,4 +24,7 @@ class Credential(models.Model):
     battery_capacity = models.CharField(max_length=100)
     # proof
     issuer_did = models.CharField(max_length=200)
-    sig = models.BinaryField(max_length=200)
+    sig = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.id
