@@ -1,6 +1,6 @@
 # Wanxiang Blockchain Hackathon
  
-This project is for Wanxiang Blockchain Hackathon 2019. We implement a **DID** (distributed indentity) system on Ethereum blockchain.
+This project is for Wanxiang Blockchain Hackathon 2019. We implement a **DID** (decentralized indentity) system on Ethereum blockchain.
 
 Team 4: **Shi Yanchen, Liu Shaowei, Wu Jiajing, Kang Beibei**
 
