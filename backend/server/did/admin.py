@@ -9,10 +9,10 @@ class IssuerAdmin(admin.ModelAdmin):
     list_display = ['did', 'name', 'industry']
 
 
-class ClaimAdmin(admin.ModelAdmin):
-    model = Claim
+class CredentialAdmin(admin.ModelAdmin):
+    model = Credential
     list_display = ['id']
 
 
 admin.site.register(Issuer, IssuerAdmin)
-admin.site.register(Claim, ClaimAdmin)
+admin.site.register(Credential, CredentialAdmin)
