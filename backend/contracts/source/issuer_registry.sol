@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./lib/set.sol";
 
-contract issuer_registry {
+contract Registry {
     using Set for Set.Data;
 
     mapping(address => address) public issuer_contracts;
@@ -18,7 +18,7 @@ contract issuer_registry {
         issuers.remove(msg.sender);
     }
 
-    function is_issuer(address _issuer) public view returns (address) {
+    function is_issuer(address _issuer) public view returns (bool) {
         return issuers.contains(_issuer);
     }
 }
