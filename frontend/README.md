@@ -1,3 +1,2 @@
-# Frontend
-
-The frontend is written by ClojureScript
+# frontend
+This is the frontend project.

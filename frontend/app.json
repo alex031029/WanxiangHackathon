@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "frontend",
+    "slug": "frontend",
+    "privacy": "public",
+    "sdkVersion": "33.0.0",
+    "entryPoint": "./target/index.js",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./resources/assets/app-info/icon.png",
+    "splash": {
+      "image": "./resources/assets/app-info/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    }
+  }
+}
