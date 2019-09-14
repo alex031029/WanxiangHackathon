@@ -1,0 +1,4 @@
+# externs
+# use for shadow-cljs auto infer
+state
+props

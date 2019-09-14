@@ -1,0 +1,1 @@
+(ns frontend.pages.start-page.core)
