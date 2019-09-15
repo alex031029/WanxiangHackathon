@@ -45,3 +45,11 @@ This verfication can be either
 
 ---
 ## Quick Start
+
+Our demonstration is a IOS and Android application. 
+
+* Compile and deploy smart contracts
+* Launch a backend server
+* Download binary releases and install in your phone
+* Run and enjoy it :)
+
