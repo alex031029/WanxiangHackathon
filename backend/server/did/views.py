@@ -1,10 +1,11 @@
 import json
 from datetime import datetime, timedelta
 
+from eth_account.messages import defunct_hash_message
 from django.core import serializers
 from django.db.models import Q
 from django.http import HttpResponse, JsonResponse
-from eth_keys import keys
+from eth_keys import keys, KeyAPI
 from web3.auto import w3
 
 from did.models import Credential, Issuer
@@ -14,7 +15,6 @@ from did.models import Credential, Issuer
 def search(req):
     name = req.GET.get('query_issuer')
     issuers = Issuer.objects.filter(Q(name__contains=name) | Q(industry__contains=name))
-    print(issuers)
     data = serializers.serialize('json', issuers)
     return HttpResponse(data)
 
@@ -37,14 +37,15 @@ def apply(req):
         # proof.
         msg = {"issuer_did": issuer_did, 'applicant_did': applicant_did, "type": type, "color": color, "brand": brand,
                "battery_capacity": battery_capacity}
+        print('*****:', json.dumps(msg))
         sig = str(make_sig(json.dumps(msg)))
         create_time = datetime.now()
         expired_time = create_time + timedelta(days=365)
 
         # cal id
         import hashlib
-        m = hashlib.md5()  # 创建md5对象
-        m.update(json.dumps(msg).encode())  # 生成加密串，其中password是要加密的字符串
+        m = hashlib.md5()
+        m.update(json.dumps(msg).encode())
         id = m.hexdigest()
         credential = Credential(id=id, applicant_did=applicant_did, type=type, color=color, brand=brand,
                                 battery_capacity=battery_capacity, issuer_did=issuer_did, sig=sig,
@@ -59,6 +60,21 @@ def apply(req):
         return JsonResponse(credential_dict)
     else:
         return HttpResponse("invalid requset ")
+
+
+#
+# d = {
+#     "issuer_did": "did:eth:d6DaE32b2F55fBadeAEb23819d6c3b6083eFbE0d",
+#     "applicant_did": "did:eth:d6DaE32b2F55fBadeAEb23819d6c3b6083eFbE0d",
+#     "type": "charging",
+#     "color": "red",
+#     "brand": "karma",
+#     "battery_capacity": "8888",
+#     "sig": "0xf036e92dba5722e76bff2b359f3705e63e7f77694c58c829b91c7973547a45922f3f1bd7816ba750dec074a0945fbebe1d1aab1fac8084557e984ab08505235701",
+#     "id": "2c26caddcbd6d3c8a5a002b3533cfb50",
+#     "create_time": "2019-09-14T09:05:48.724",
+#     "expired_time": "2020-09-13T09:05:48.724"
+# }
 
 
 # >>> from eth_keys import keys
@@ -95,6 +111,35 @@ def make_sig(msg):
         # 0xc91c9f8774574155bdcb845fea373eac2e83274f871d4b0223d6b2806ad40e17255a5e7b6b3f72f3572c6b3d5a79e8ed32fa307c5fd94098b789cc88d684952c00
 
         # print(pk.public_key.to_checksum_address())
-        # print(111, signature.recover_public_key_from_msg(msg)
-        print(dir(signature))
+        # print(111, signature.recover_public_key_from_msg(msg))
+        # print(msg)
+        # print(pk.public_key)
+        # print(222, signature.verify_msg(msg, pk.public_key))
         return signature
+
+
+def verify(req):
+    vc_str = req.GET.get('vc')
+    vc = json.loads(vc_str)
+    sig_from_client = vc.get('sig')
+    issuer_did = vc.get('issuer_did')
+    applicant_did = vc.get('applicant_did')
+    type = vc.get('type')
+    color = vc.get('color')
+    brand = vc.get('brand')
+    battery_capacity = vc.get('battery_capacity')
+    msg = {"issuer_did": issuer_did, 'applicant_did': applicant_did, "type": type, "color": color, "brand": brand,
+           "battery_capacity": battery_capacity}
+    msg = json.dumps(msg)
+    print("88888:", msg)
+    print('sig_from_client', sig_from_client)
+
+    print("================================================================================")
+    # gen msg hash
+    msghash = defunct_hash_message(text=msg).hex()
+    print('msghash:', msghash)
+
+    from eth_account import Account
+    addr = Account.recoverHash(msghash, signature=sig_from_client)
+    print('recover addr: ', addr)
+    return HttpResponse(addr == '7c7f4692fb2f9e6d19165d6e33111c4605119a99')
