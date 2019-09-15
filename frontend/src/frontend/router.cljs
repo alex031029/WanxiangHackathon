@@ -103,4 +103,4 @@
     {:initialRouteName "auth"
      :headerMode "none"}))
 
-(def app-container (r-nav/make-app-container tab-nav))
+(def app-container (r-nav/make-app-container Auth-stack))

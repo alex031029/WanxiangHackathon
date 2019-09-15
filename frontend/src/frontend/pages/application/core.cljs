@@ -82,23 +82,24 @@
                                           :on-press (fn []
                                                       (r/set-state this {:content ""})
                                                       (-> ^js (:m-ref (r/state this))
-                                                          (.. -_root -clear)))}])]
+                                                          .-_root
+                                                          .clear))}])]
                           [:> nb/Button {:style    a-styles/appli-button
-                                         :on-press (r/set-state this {:data "has"})}
+                                         :on-press #(r/set-state this {:data "has"})}
                            [:> nb/Text "Search"]]
                           (when (not= (:data (r/state this)) nil)
-                            [:> nb/Card
+                            [:> nb/Card {:style a-styles/card}
                              [:> nb/CardItem {:header   true
                                               :button   true
                                               :on-press nil}
                               [:> nb/Text "Karma_charging"]]
                              [:> nb/CardItem
-                              [:> nb/body
+                              [:> nb/Body
                                [:> nb/Text "name: Karma_charging"]
                                [:> nb/Text "industry: Charging"]
                                [:> nb/Text "model: Issuer"]]]
                              [:> nb/CardItem {:footer   true
                                               :button   true
                                               :on-press (fn []
-                                                          (.navigate navigation "detail" {:data (:data (r/state this))}))}
+                                                          (.navigate navigation "details" {:data (:data (r/state this))}))}
                               [:> nb/Text "Apply"]]])]])}))
