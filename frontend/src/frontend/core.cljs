@@ -1,7 +1,7 @@
 (ns frontend.core
   (:require [reagent.core :as r]
-            [cpc-did.router :as router]
-            [cpc-did.utils.register-app :as register]))
+            [frontend.router :as router]
+            [frontend.utils.register-app :as register]))
 
 (defn start
   {:dev/after-load true}

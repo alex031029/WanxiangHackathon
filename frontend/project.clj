@@ -6,7 +6,8 @@
   
   :dependencies [[thheller/shadow-cljs "2.8.47"]
                  [re-frame "0.10.7"]
-                 [com.cognitect/transit-cljs "0.8.256"]]
+                 [com.cognitect/transit-cljs "0.8.256"]
+                 [cljs-http "0.1.46"]]
   
   :plugins [[lein-shadow "0.1.4"]]
 
