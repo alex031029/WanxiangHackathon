@@ -14,6 +14,8 @@ Team 4: **Shi Yanchen, Liu Shaowei, Wu Jiajing, Kang Beibei**
 
 VID is a fexible digital identity for each entities involved in automotive industry as well related services. It can also solve the trust issue in V2X, inspired by PKI (public key infrastructure). 
 
+![VID Overview](https://i.imgur.com/3LRvzHB.jpg)
+
 ---
 ## Features
 
