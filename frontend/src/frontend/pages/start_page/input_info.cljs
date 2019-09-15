@@ -14,7 +14,15 @@
                           .-Wallet
                           .createRandom)
         info (.-signingKey ^js random-wallet)]
-    (.navigate navigation "tab-nav" {:VIN vin})))
+    (promise->
+      (.encrypt random-wallet password)
+      #(.setItem rn/AsyncStorage
+                "keystore"
+                 %)
+      (.setItem rn/AsyncStorage
+                "VIN"
+                vin)
+      (.navigate navigation "tab-nav" {:VIN vin}))))
 
 (defn page
   "docstring"
